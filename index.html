@@ -20,7 +20,7 @@ h1{font-family:Cinzel,serif;font-size:30px;line-height:1.15;text-align:center;ma
 .card{background:linear-gradient(180deg,var(--card2),var(--card));border:1.5px solid var(--line);border-radius:18px;padding:18px;margin:0 0 16px;box-shadow:0 12px 40px rgba(0,0,0,.45)}
 .label{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:0 0 10px}
 .row{display:flex;gap:10px;flex-wrap:wrap}
-.field{flex:1 1 150px}
+.field{flex:1 1 200px}
 .field span{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
 select,input[type=date]{width:100%;font:inherit;font-size:16px;color:var(--ivory);background:#0f0c07;border:1.5px solid var(--line);border-radius:12px;padding:11px 12px;color-scheme:dark}
 .big{display:block;width:100%;border:0;border-radius:14px;padding:16px 18px;font:inherit;font-size:18px;font-weight:700;color:#1a1205;background:linear-gradient(180deg,#F7DE8A,#C99A35);box-shadow:0 8px 26px rgba(212,175,55,.3);cursor:pointer;text-align:center;text-decoration:none}
@@ -43,6 +43,11 @@ details summary{cursor:pointer;color:var(--gold-hi);font-weight:600;font-size:15
 .plan h3 b{color:var(--date);font-weight:600}
 .plan ol{margin:4px 0 4px 18px;padding:0;font-size:14.5px;line-height:1.45}
 .plan .done-when{font-size:13.5px;color:var(--muted);margin:2px 0 0}
+.alert{border-color:var(--gold);border-width:2px}
+.alert h2{font-size:18px;color:var(--gold-hi);margin:0 0 6px}
+.alert p{margin:0 0 10px;font-size:15px;line-height:1.45}
+.alert .row a,.alert .row button{flex:1 1 140px;text-align:center}
+.hide{display:none}
 .foot{text-align:center;color:var(--muted);font-size:12.5px;margin-top:22px}
 @media (min-width:600px){h1{font-size:36px}.tt{font-size:16.5px}}
 </style>
@@ -53,6 +58,13 @@ details summary{cursor:pointer;color:var(--gold-hi);font-weight:600;font-size:15
   <h1>Your 7-Day First Sale Plan</h1>
   <p class="sub" id="sub">Starts tomorrow. Same time every day.</p>
 
+  <div class="card alert hide" id="inapp">
+    <h2>First, open this page in Chrome or Safari</h2>
+    <p id="inappHow">This app cannot add the plan to your calendar. Tap <b>⋮</b> or <b>···</b> at the top, then tap <b>Open in Chrome</b> or <b>Open in browser</b>. On an iPhone, choose <b>Open in Safari</b>.</p>
+    <div class="row"><a class="add hide" id="openChrome" href="#">Open in Chrome</a><button class="add" id="copyLink" type="button">Copy page link</button></div>
+    <p class="note" style="margin-top:8px">Or type this in your browser: <b>coacheasily.co/7dayplan</b></p>
+  </div>
+
   <div class="card">
     <p class="label">1 · Pick your time</p>
     <div class="row">
@@ -61,14 +73,14 @@ details summary{cursor:pointer;color:var(--gold-hi);font-weight:600;font-size:15
     </div>
   </div>
 
-  <div class="card">
-    <p class="label">2 · Add all 7 days</p>
-    <a class="big" id="ics" href="#">Add all 7 days to my calendar<small>iPhone, Mac, Outlook and most Android calendars · 2 reminders each day</small></a>
-    <p class="note">Your phone asks to open the calendar file. Tap <b>Add all</b> (or <b>Import</b>). On an iPhone, open this page in <b>Safari</b>.</p>
+  <div class="card" id="cardIcs">
+    <p class="label" id="icsLabel">2 · Add all 7 days</p>
+    <a class="big" id="ics" href="#"><span id="icsBtn">Add all 7 days to my calendar</span><small id="icsSmall">iPhone, Mac, Outlook and Samsung Calendar · 2 reminders each day</small></a>
+    <p class="note" id="icsNote">Your phone asks to open the calendar file. Tap <b>Add all</b> (or <b>Import</b>). On an iPhone, open this page in <b>Safari</b>.</p>
   </div>
 
-  <div class="card">
-    <p class="label">Using Google Calendar on your phone?</p>
+  <div class="card" id="cardG">
+    <p class="label" id="gLabel">Using Google Calendar on your phone?</p>
     <p class="note" style="margin:0 0 12px">Google allows one day per tap from a phone. Tap each day once, then tap <b>Save</b> in Google Calendar.</p>
     <div class="days" id="days"></div>
     <p class="note">On a laptop? <a id="gall" href="#" target="_blank" rel="noopener" style="color:var(--gold-hi)">Add all 7 to Google Calendar in one click</a>.</p>
@@ -108,6 +120,7 @@ const WD = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], MO = ['Jan', 'Feb'
 const nice = d => WD[d.getDay()] + ' ' + d.getDate() + ' ' + MO[d.getMonth()];
 const ymd = d => d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate());
 const isoDate = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+let TZ = 'Asia/Kolkata'; try { TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone || TZ).replace('Asia/Calcutta', 'Asia/Kolkata'); } catch (e) {}
 const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
 
 // the times people can choose (5 AM to 10 PM, every 30 minutes); 8 PM is set
@@ -120,7 +133,7 @@ const today = new Date(); const tomorrow = new Date(today.getFullYear(), today.g
 $('start').value = isoDate(tomorrow); $('start').min = isoDate(today);
 
 function plan() {
-  const p = $('start').value.split('-').map(Number); const s = new Date(p[0], p[1] - 1, p[2]);
+  const p = ($('start').value || isoDate(tomorrow)).split('-').map(Number); const s = new Date(p[0], p[1] - 1, p[2]);
   const mins = +sel.value; const days = [];
   for (let k = 0; k < 7; k++) { const d = new Date(s.getFullYear(), s.getMonth(), s.getDate() + k);
     const a = new Date(d.getFullYear(), d.getMonth(), d.getDate(), Math.floor(mins / 60), mins % 60), b = new Date(a.getTime() + 2 * 3600 * 1000);
@@ -128,23 +141,25 @@ function plan() {
   return { days, mins };
 }
 const stamp = d => ymd(d) + 'T' + pad(d.getHours()) + pad(d.getMinutes()) + '00';
+const utcStamp = d => d.getUTCFullYear() + pad(d.getUTCMonth() + 1) + pad(d.getUTCDate()) + 'T' + pad(d.getUTCHours()) + pad(d.getUTCMinutes()) + pad(d.getUTCSeconds()) + 'Z';
 function details(k) { return 'Day ' + (k + 1) + ' of 7: ' + TITLE[k] + '\n\n' + STEPS[k].slice(0, 3).map((t, i) => (i + 1) + '. ' + t).join('\n') + '\n\n' + STEPS[k][3] + '\n\n' + MISSION; }
-function gLink(x) { return 'https://calendar.google.com/calendar/render?' + new URLSearchParams({ action: 'TEMPLATE', text: 'Day ' + (x.k + 1) + ' of 7: ' + SHORT[x.k], dates: stamp(x.a) + '/' + stamp(x.b), details: details(x.k) }).toString(); }
+function gLink(x) { return 'https://calendar.google.com/calendar/render?' + new URLSearchParams({ action: 'TEMPLATE', text: 'Day ' + (x.k + 1) + ' of 7: ' + SHORT[x.k], dates: stamp(x.a) + '/' + stamp(x.b), ctz: TZ, details: details(x.k) }).toString(); }
 function gAll(P) { const x = P.days[0];
   const list = P.days.map(y => 'Day ' + (y.k + 1) + ' · ' + nice(y.d) + ': ' + SHORT[y.k]).join('\n');
-  return 'https://calendar.google.com/calendar/render?' + new URLSearchParams({ action: 'TEMPLATE', text: 'My 7-Day First Sale Plan', dates: stamp(x.a) + '/' + stamp(x.b), recur: 'RRULE:FREQ=DAILY;COUNT=7', details: list + '\n\n' + MISSION }).toString(); }
+  return 'https://calendar.google.com/calendar/render?' + new URLSearchParams({ action: 'TEMPLATE', text: 'My 7-Day First Sale Plan', dates: stamp(x.a) + '/' + stamp(x.b), ctz: TZ, recur: 'RRULE:FREQ=DAILY;COUNT=7', details: list + '\n\n' + MISSION }).toString(); }
 const esc = t => t.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
 function fold(line) { const out = []; let cur = ''; let n = 0;
   for (const ch of line) { const b = new TextEncoder().encode(ch).length; if (n + b > 74) { out.push(cur); cur = ''; n = 0; } cur += ch; n += b; }
   out.push(cur); return out.join('\r\n '); }
 function ics(P) {
-  const now = new Date(), utc = now.getUTCFullYear() + pad(now.getUTCMonth() + 1) + pad(now.getUTCDate()) + 'T' + pad(now.getUTCHours()) + pad(now.getUTCMinutes()) + pad(now.getUTCSeconds()) + 'Z';
+  const utc = utcStamp(new Date());
   const L = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//CoachEasily//CBAX 7-Day First Sale Plan//EN', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH'];
-  const morning = P.mins - 9 * 60;   // a reminder at 9 AM on the day, if the session is later than 10 AM
+  // first reminder: 9 AM on the day; if the session starts before 10 AM, 9 PM the night before
+  const early = P.mins - 9 * 60 >= 60 ? P.mins - 9 * 60 : P.mins + 3 * 60;
   P.days.forEach(x => {
     L.push('BEGIN:VEVENT', 'UID:cbax7-' + ymd(x.d) + '-' + (x.k + 1) + '-' + Math.random().toString(36).slice(2, 10) + '@coacheasily', 'DTSTAMP:' + utc,
-      'DTSTART:' + stamp(x.a), 'DTEND:' + stamp(x.b), fold('SUMMARY:' + esc('Day ' + (x.k + 1) + ' of 7: ' + SHORT[x.k])), fold('DESCRIPTION:' + esc(details(x.k))));
-    if (morning >= 60) L.push('BEGIN:VALARM', 'ACTION:DISPLAY', fold('DESCRIPTION:' + esc('Today: Day ' + (x.k + 1) + ' of your 7-Day First Sale Plan. ' + SHORT[x.k] + '.')), 'TRIGGER:-PT' + Math.floor(morning / 60) + 'H' + (morning % 60) + 'M', 'END:VALARM');
+      'DTSTART:' + utcStamp(x.a), 'DTEND:' + utcStamp(x.b), fold('SUMMARY:' + esc('Day ' + (x.k + 1) + ' of 7: ' + SHORT[x.k])), fold('DESCRIPTION:' + esc(details(x.k))));
+    L.push('BEGIN:VALARM', 'ACTION:DISPLAY', fold('DESCRIPTION:' + esc((early > P.mins ? 'Tomorrow: ' : 'Today: ') + 'Day ' + (x.k + 1) + ' of your 7-Day First Sale Plan. ' + SHORT[x.k] + '.')), 'TRIGGER:-PT' + Math.floor(early / 60) + 'H' + (early % 60) + 'M', 'END:VALARM');
     L.push('BEGIN:VALARM', 'ACTION:DISPLAY', fold('DESCRIPTION:' + esc('In 30 minutes: Day ' + (x.k + 1) + '. ' + SHORT[x.k] + '.')), 'TRIGGER:-PT30M', 'END:VALARM', 'END:VEVENT');
   });
   L.push('END:VCALENDAR'); return L.join('\r\n') + '\r\n';
@@ -163,10 +178,42 @@ function render() {
   $('plan').innerHTML = P.days.map(x => '<h3>Day ' + (x.k + 1) + ' · <b>' + nice(x.d) + '</b> · ' + TITLE[x.k] + '</h3><ol>' + STEPS[x.k].slice(0, 3).map(t => '<li>' + t.replace(/</g, '&lt;') + '</li>').join('') + '</ol><p class="done-when">' + STEPS[x.k][3] + '</p>').join('');
 }
 $('ics').addEventListener('click', ev => { ev.preventDefault(); const text = ics(plan());
-  const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  if (iOS) { location.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(text); return; }
+  if (IOS) { location.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(text); return; }
   const url = URL.createObjectURL(new Blob([text], { type: 'text/calendar;charset=utf-8' }));
   const a = document.createElement('a'); a.href = url; a.download = '7-Day First Sale Plan.ics'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 4000); });
+// which phone and which browser: show each person the path that works for them
+const UA = navigator.userAgent;
+const IOS = /iPad|iPhone|iPod/.test(UA) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const ANDROID = /Android/i.test(UA);
+const IN_APP = /FBAN|FBAV|FB_IAB|Instagram|WhatsApp|Line\/|Zoom|GSA\/|Snapchat|LinkedInApp|Twitter|MicroMessenger/i.test(UA) || (ANDROID && /; wv\)/.test(UA)) || (IOS && !/Safari\//.test(UA));
+const IOS_OTHER = IOS && /CriOS|FxiOS|EdgiOS|OPiOS/.test(UA);
+const SAMSUNG = /SamsungBrowser/i.test(UA);
+const PAGE = location.href.split('#')[0];
+const copyPage = b => { const ok = () => { b.textContent = '✓ Link copied'; };
+  try { navigator.clipboard.writeText(PAGE).then(ok, () => prompt('Copy this link:', PAGE)); } catch (e) { prompt('Copy this link:', PAGE); } };
+$('copyLink').addEventListener('click', () => copyPage($('copyLink')));
+if (IN_APP) {
+  $('inapp').classList.remove('hide');
+  if (ANDROID) { const o = $('openChrome'); o.classList.remove('hide'); o.href = 'intent://' + PAGE.replace(/^https?:\/\//, '') + '#Intent;scheme=' + location.protocol.replace(':', '') + ';package=com.android.chrome;end'; }
+  if (IOS) $('inappHow').innerHTML = 'This app cannot add the plan to your calendar. Tap <b>···</b> at the top, then tap <b>Open in Safari</b> (or <b>Open in browser</b>).';
+} else if (IOS_OTHER) {
+  $('icsNote').innerHTML = 'This works best in <b>Safari</b>. If nothing opens, tap <b>Copy page link</b> below, open Safari and paste it. Using Google Calendar? Use the <b>+ Add</b> buttons below.';
+  $('icsNote').insertAdjacentHTML('afterend', '<button class="add" type="button" id="copy2" style="margin-top:10px">Copy page link</button>');
+  $('copy2').addEventListener('click', () => copyPage($('copy2')));
+} else if (ANDROID && !SAMSUNG) {
+  // the Google Calendar app on Android cannot open a calendar file: put the one-day buttons first
+  $('cardIcs').parentNode.insertBefore($('cardG'), $('cardIcs'));
+  $('gLabel').textContent = '2 · Add to Google Calendar (most Android phones)';
+  $('icsLabel').textContent = 'Samsung Calendar or another calendar app?';
+  $('icsBtn').textContent = 'Add all 7 days in one tap';
+  $('icsSmall').textContent = 'For Samsung Calendar, Outlook and other calendar apps · not for Google Calendar';
+  $('icsNote').innerHTML = 'A calendar file downloads. Open it and tap <b>Import</b> or <b>Save</b>. If your phone says it cannot open the file, use the <b>+ Add</b> buttons above.';
+} else if (ANDROID && SAMSUNG) {
+  $('icsSmall').textContent = 'Best for Samsung Calendar · 2 reminders each day';
+  $('icsNote').innerHTML = 'A calendar file downloads. Open it and tap <b>Import</b> or <b>Save</b>. Use Google Calendar? Use the <b>+ Add</b> buttons below.';
+} else if (IOS) {
+  $('icsNote').innerHTML = 'Your iPhone shows the 7 days. Tap <b>Add All</b> at the top.';
+}
 sel.addEventListener('change', render); $('start').addEventListener('change', () => { if ($('start').value) render(); });
 render();
 </script>
