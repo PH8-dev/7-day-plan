@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your 7-Day First Sale Plan · CBAX</title>
+<meta name="description" content="Add your 7-Day First Sale Plan to your calendar. It starts tomorrow, at the time you choose.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0906;--card:#16120b;--card2:#1e180e;--line:rgba(212,175,55,.32);--gold:#D4AF37;--gold-hi:#F7DE8A;--ivory:#F6EFDF;--muted:#B9AE95;--date:#8ED1FF;--ok:#7BD88F}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ivory);font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;-webkit-text-size-adjust:100%}
+body{background:radial-gradient(1200px 600px at 50% -10%,rgba(212,175,55,.16),transparent 60%),var(--bg);min-height:100vh}
+.wrap{max-width:720px;margin:0 auto;padding:22px 16px 60px}
+.logo{display:block;height:34px;margin:4px auto 16px}
+h1{font-family:Cinzel,serif;font-size:30px;line-height:1.15;text-align:center;margin:0 0 6px;background:linear-gradient(180deg,#FBE9A8,#C99A35);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{text-align:center;color:var(--muted);font-size:15.5px;margin:0 0 20px}
+.sub b{color:var(--date);font-weight:600}
+.card{background:linear-gradient(180deg,var(--card2),var(--card));border:1.5px solid var(--line);border-radius:18px;padding:18px;margin:0 0 16px;box-shadow:0 12px 40px rgba(0,0,0,.45)}
+.label{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:0 0 10px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.field{flex:1 1 150px}
+.field span{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+select,input[type=date]{width:100%;font:inherit;font-size:16px;color:var(--ivory);background:#0f0c07;border:1.5px solid var(--line);border-radius:12px;padding:11px 12px;color-scheme:dark}
+.big{display:block;width:100%;border:0;border-radius:14px;padding:16px 18px;font:inherit;font-size:18px;font-weight:700;color:#1a1205;background:linear-gradient(180deg,#F7DE8A,#C99A35);box-shadow:0 8px 26px rgba(212,175,55,.3);cursor:pointer;text-align:center;text-decoration:none}
+.big small{display:block;font-size:13px;font-weight:500;margin-top:2px;color:#3b2c10}
+.note{font-size:13.5px;color:var(--muted);margin:10px 2px 0;line-height:1.45}
+.days{display:flex;flex-direction:column;gap:10px}
+.day{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;background:#120e08;border:1.5px solid var(--line);border-left:4px solid var(--gold);border-radius:14px;padding:12px}
+.num{width:40px;height:40px;border-radius:50%;background:linear-gradient(180deg,#F7DE8A,#C99A35);color:#1a1205;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:17px}
+.dt{font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.dt b{color:var(--date);font-weight:600}
+.tt{font-size:15.5px;font-weight:600;line-height:1.3;margin-top:2px}
+.add{border:1.5px solid var(--gold);background:transparent;color:var(--gold-hi);border-radius:10px;padding:9px 12px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;text-decoration:none}
+.add.done{border-color:var(--ok);color:var(--ok)}
+.mission{text-align:center;border-color:var(--gold);background:linear-gradient(180deg,rgba(70,52,16,.95),rgba(24,18,8,.95))}
+.mission h2{font-size:20px;letter-spacing:.08em;color:var(--gold-hi);margin:0 0 4px}
+.mission p{margin:0;font-size:15.5px}
+details{border-top:1px solid rgba(212,175,55,.18);padding-top:10px;margin-top:4px}
+details summary{cursor:pointer;color:var(--gold-hi);font-weight:600;font-size:15px}
+.plan h3{font-size:15px;margin:14px 0 4px;color:var(--gold-hi)}
+.plan h3 b{color:var(--date);font-weight:600}
+.plan ol{margin:4px 0 4px 18px;padding:0;font-size:14.5px;line-height:1.45}
+.plan .done-when{font-size:13.5px;color:var(--muted);margin:2px 0 0}
+.foot{text-align:center;color:var(--muted);font-size:12.5px;margin-top:22px}
+@media (min-width:600px){h1{font-size:36px}.tt{font-size:16.5px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <img class="logo" src="logo.png" alt="CBAX">
+  <h1>Your 7-Day First Sale Plan</h1>
+  <p class="sub" id="sub">Starts tomorrow. Same time every day.</p>
+
+  <div class="card">
+    <p class="label">1 · Pick your time</p>
+    <div class="row">
+      <label class="field"><span>Time, every day (2 hours)</span><select id="time"></select></label>
+      <label class="field"><span>Day 1 starts on</span><input type="date" id="start"></label>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="label">2 · Add all 7 days</p>
+    <a class="big" id="ics" href="#">Add all 7 days to my calendar<small>iPhone, Mac, Outlook and most Android calendars · 2 reminders each day</small></a>
+    <p class="note">Your phone asks to open the calendar file. Tap <b>Add all</b> (or <b>Import</b>). On an iPhone, open this page in <b>Safari</b>.</p>
+  </div>
+
+  <div class="card">
+    <p class="label">Using Google Calendar on your phone?</p>
+    <p class="note" style="margin:0 0 12px">Google allows one day per tap from a phone. Tap each day once, then tap <b>Save</b> in Google Calendar.</p>
+    <div class="days" id="days"></div>
+    <p class="note">On a laptop? <a id="gall" href="#" target="_blank" rel="noopener" style="color:var(--gold-hi)">Add all 7 to Google Calendar in one click</a>.</p>
+  </div>
+
+  <div class="card mission">
+    <h2>MISSION 20</h2>
+    <p>Repeat these 7 days until 20 students have paid you.<br>If a day slips, move it. Never skip it.</p>
+  </div>
+
+  <div class="card plan">
+    <details>
+      <summary>See what to do each day</summary>
+      <div id="plan"></div>
+    </details>
+  </div>
+
+  <p class="foot">CoachEasily · CBAX</p>
+</div>
+
+<script>
+const SHORT = ['Niche statement + offer PPT', 'Promo assets: video, image, form', 'Spread the word: 20 DMs', 'Book calls, start 1-on-1 calls', 'Objections + calls till a sale', 'Close first student + orientation', 'Wrap up, share wins, 1 referral'];
+const TITLE = ['Lock your offer', 'Create your promo assets', 'Spread the word', 'Book your calls', 'Make your offer', 'Close and welcome', 'Deliver, ask, celebrate'];
+const STEPS = [
+ ['Read your niche statement out loud. Could a 10-year-old understand it? If not, fix it in Niche Tweaking AI.', 'Write your offer in one line: "I help [who] get [result] in [time] without [pain]."', 'Make a 5-slide offer deck: the promise, the problem, the solution, the proof (your story), the next step.', 'Done when: your offer deck is ready. Someone could pay you tomorrow.'],
+ ['One 60-second video: the pain (5 sec), your story (20), what you help with (20), "fill the form" (15).', 'Three images: the pain, the dream result, the offer.', 'One Google Form, 5 questions: name, WhatsApp, biggest problem, tried before?, ready to invest?', 'Done when: video, 3 images, the form link and your payment link are ready.'],
+ ['Post the video and the images on Instagram, Facebook and LinkedIn, with the form link.', 'Send 20 personal messages to people who already know you. Ask: "Do you know someone who needs this?"', 'Target: 10 people fill your form.', 'Done when: 20 personal messages sent. Your posts are live.'],
+ ['Message everyone who filled the form. Offer them 3 time slots for a 30-minute call.', 'On each call: opening, rapport, then their pain. No pitch today.', 'Write down their exact words. You will use them tomorrow.', 'Done when: 5 calls booked. 2 or 3 done.'],
+ ['Second calls: say their pain back in their words, then show your offer as the bridge.', 'Answer their doubts calmly. "Too expensive?" "What does 12 more months of this problem cost you?"', 'Ask: "Would you like to start?" Then stay silent. When they say yes, send the payment link right then.', 'Done when: your first paying student, or real lessons for tomorrow.'],
+ ['Follow up with everyone who said "maybe" or "let me think".', 'Send your first student a warm welcome message and the group link.', 'Fix the time for their orientation call.', 'Done when: your first student feels special. Every "maybe" has heard from you.'],
+ ['Deliver the orientation session. Show up early. Be prepared.', 'At the end, ask: "Who is one person you know who has the same problem?" Then stay silent.', 'Post your win. Then plan your next 7 days: Mission 20.', 'Done when: orientation done, one referral asked, your next 7 days planned.']
+];
+const MISSION = 'Mission 20: repeat these 7 days until 20 students have paid you. If a day slips, move it. Never skip it.';
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2, '0');
+const WD = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], MO = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const nice = d => WD[d.getDay()] + ' ' + d.getDate() + ' ' + MO[d.getMonth()];
+const ymd = d => d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate());
+const isoDate = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+
+// the times people can choose (5 AM to 10 PM, every 30 minutes); 8 PM is set
+const sel = $('time');
+for (let m = 5 * 60; m <= 22 * 60; m += 30) { const h = Math.floor(m / 60), mm = m % 60, o = document.createElement('option');
+  o.value = m; o.textContent = ((h + 11) % 12 + 1) + ':' + pad(mm) + (h < 12 ? ' AM' : ' PM') + ' to ' + (((h + 2) + 11) % 12 + 1) + ':' + pad(mm) + ((h + 2) < 12 || (h + 2) === 24 ? ' AM' : ' PM'); sel.appendChild(o); }
+sel.value = store.get('cbax7_time') || String(20 * 60);
+// Day 1 = tomorrow, from the visitor's own clock: the page never needs new dates
+const today = new Date(); const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+$('start').value = isoDate(tomorrow); $('start').min = isoDate(today);
+
+function plan() {
+  const p = $('start').value.split('-').map(Number); const s = new Date(p[0], p[1] - 1, p[2]);
+  const mins = +sel.value; const days = [];
+  for (let k = 0; k < 7; k++) { const d = new Date(s.getFullYear(), s.getMonth(), s.getDate() + k);
+    const a = new Date(d.getFullYear(), d.getMonth(), d.getDate(), Math.floor(mins / 60), mins % 60), b = new Date(a.getTime() + 2 * 3600 * 1000);
+    days.push({ k, d, a, b }); }
+  return { days, mins };
+}
+const stamp = d => ymd(d) + 'T' + pad(d.getHours()) + pad(d.getMinutes()) + '00';
+function details(k) { return 'Day ' + (k + 1) + ' of 7: ' + TITLE[k] + '\n\n' + STEPS[k].slice(0, 3).map((t, i) => (i + 1) + '. ' + t).join('\n') + '\n\n' + STEPS[k][3] + '\n\n' + MISSION; }
+function gLink(x) { return 'https://calendar.google.com/calendar/render?' + new URLSearchParams({ action: 'TEMPLATE', text: 'Day ' + (x.k + 1) + ' of 7: ' + SHORT[x.k], dates: stamp(x.a) + '/' + stamp(x.b), details: details(x.k) }).toString(); }
+function gAll(P) { const x = P.days[0];
+  const list = P.days.map(y => 'Day ' + (y.k + 1) + ' · ' + nice(y.d) + ': ' + SHORT[y.k]).join('\n');
+  return 'https://calendar.google.com/calendar/render?' + new URLSearchParams({ action: 'TEMPLATE', text: 'My 7-Day First Sale Plan', dates: stamp(x.a) + '/' + stamp(x.b), recur: 'RRULE:FREQ=DAILY;COUNT=7', details: list + '\n\n' + MISSION }).toString(); }
+const esc = t => t.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
+function fold(line) { const out = []; let cur = ''; let n = 0;
+  for (const ch of line) { const b = new TextEncoder().encode(ch).length; if (n + b > 74) { out.push(cur); cur = ''; n = 0; } cur += ch; n += b; }
+  out.push(cur); return out.join('\r\n '); }
+function ics(P) {
+  const now = new Date(), utc = now.getUTCFullYear() + pad(now.getUTCMonth() + 1) + pad(now.getUTCDate()) + 'T' + pad(now.getUTCHours()) + pad(now.getUTCMinutes()) + pad(now.getUTCSeconds()) + 'Z';
+  const L = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//CoachEasily//CBAX 7-Day First Sale Plan//EN', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH'];
+  const morning = P.mins - 9 * 60;   // a reminder at 9 AM on the day, if the session is later than 10 AM
+  P.days.forEach(x => {
+    L.push('BEGIN:VEVENT', 'UID:cbax7-' + ymd(x.d) + '-' + (x.k + 1) + '-' + Math.random().toString(36).slice(2, 10) + '@coacheasily', 'DTSTAMP:' + utc,
+      'DTSTART:' + stamp(x.a), 'DTEND:' + stamp(x.b), fold('SUMMARY:' + esc('Day ' + (x.k + 1) + ' of 7: ' + SHORT[x.k])), fold('DESCRIPTION:' + esc(details(x.k))));
+    if (morning >= 60) L.push('BEGIN:VALARM', 'ACTION:DISPLAY', fold('DESCRIPTION:' + esc('Today: Day ' + (x.k + 1) + ' of your 7-Day First Sale Plan. ' + SHORT[x.k] + '.')), 'TRIGGER:-PT' + Math.floor(morning / 60) + 'H' + (morning % 60) + 'M', 'END:VALARM');
+    L.push('BEGIN:VALARM', 'ACTION:DISPLAY', fold('DESCRIPTION:' + esc('In 30 minutes: Day ' + (x.k + 1) + '. ' + SHORT[x.k] + '.')), 'TRIGGER:-PT30M', 'END:VALARM', 'END:VEVENT');
+  });
+  L.push('END:VCALENDAR'); return L.join('\r\n') + '\r\n';
+}
+function render() {
+  const P = plan(); store.set('cbax7_time', sel.value);
+  $('sub').innerHTML = 'Day 1 is <b>' + nice(P.days[0].d) + '</b>. Day 7 is <b>' + nice(P.days[6].d) + '</b>. Same time every day.';
+  const box = $('days'); box.innerHTML = '';
+  P.days.forEach(x => { const key = 'cbax7_' + ymd(x.d) + '_' + (x.k + 1) + '_' + sel.value;
+    const row = document.createElement('div'); row.className = 'day';
+    row.innerHTML = '<div class="num">' + (x.k + 1) + '</div><div><div class="dt">Day ' + (x.k + 1) + ' · <b>' + nice(x.d) + '</b></div><div class="tt">' + SHORT[x.k] + '</div></div>';
+    const a = document.createElement('a'); a.className = 'add' + (store.get(key) ? ' done' : ''); a.textContent = store.get(key) ? '✓ Added' : '+ Add'; a.href = gLink(x); a.target = '_blank'; a.rel = 'noopener';
+    a.addEventListener('click', () => { store.set(key, '1'); a.classList.add('done'); a.textContent = '✓ Added'; });
+    row.appendChild(a); box.appendChild(row); });
+  $('gall').href = gAll(P);
+  $('plan').innerHTML = P.days.map(x => '<h3>Day ' + (x.k + 1) + ' · <b>' + nice(x.d) + '</b> · ' + TITLE[x.k] + '</h3><ol>' + STEPS[x.k].slice(0, 3).map(t => '<li>' + t.replace(/</g, '&lt;') + '</li>').join('') + '</ol><p class="done-when">' + STEPS[x.k][3] + '</p>').join('');
+}
+$('ics').addEventListener('click', ev => { ev.preventDefault(); const text = ics(plan());
+  const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  if (iOS) { location.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(text); return; }
+  const url = URL.createObjectURL(new Blob([text], { type: 'text/calendar;charset=utf-8' }));
+  const a = document.createElement('a'); a.href = url; a.download = '7-Day First Sale Plan.ics'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 4000); });
+sel.addEventListener('change', render); $('start').addEventListener('change', () => { if ($('start').value) render(); });
+render();
+</script>
+</body>
+</html>
